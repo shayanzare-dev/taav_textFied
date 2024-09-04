@@ -7,7 +7,7 @@ class TodoCreator extends StatelessWidget {
 
   final TextEditingController textEditingController = TextEditingController();
 
-  final GlobalKey _formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
 
   @override
   Widget build(BuildContext context) {
@@ -15,7 +15,6 @@ class TodoCreator extends StatelessWidget {
       children: [
         ElevatedButton(onPressed: _onSubmit, child: const Text('submit')),
         Form(
-          /// question
           key: _formKey,
           child: Expanded(
             child: _textForms(),
@@ -35,8 +34,15 @@ class TodoCreator extends StatelessWidget {
         TextFormField(
           decoration: const InputDecoration(hintText: 'description'),
           controller: textEditingController,
+          autofocus: true,
           validator: (value) {
-            
+            if (value == null) {
+              return 'nullll';
+            }
+            if (value.isEmpty) {
+              return 'emptyyy';
+            }
+            return null;
           },
         ),
       ],
@@ -44,7 +50,9 @@ class TodoCreator extends StatelessWidget {
   }
 
   void _onSubmit() {
-    onSubmit(textEditingController.text);
-    textEditingController.clear();
+    if (_formKey.currentState?.validate() ?? false) {
+      onSubmit(textEditingController.text);
+      textEditingController.clear();
+    }
   }
 }
